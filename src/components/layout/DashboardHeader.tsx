@@ -16,7 +16,7 @@ export const DashboardHeader = () => {
     <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto px-4 h-14 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <h1 className="text-xl font-bold text-primary">Smart Habit Tracker</h1>
+          <h1 className="text-3xl font-bold text-primary">Smart Habit Tracker</h1>
         </div>
 
         <div className="flex items-center gap-4">
