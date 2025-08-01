@@ -24,7 +24,13 @@ const HABIT_CATEGORIES = [
 ];
 
 interface CreateHabitDialogProps {
-  onCreateHabit: (habitData: any) => Promise<void>;
+  onCreateHabit: (habitData: {
+    title: string;
+    description?: string;
+    category?: string;
+    color: string;
+    target_frequency: number;
+  }) => Promise<void>;
 }
 
 export const CreateHabitDialog: React.FC<CreateHabitDialogProps> = ({ onCreateHabit }) => {
@@ -44,10 +50,7 @@ export const CreateHabitDialog: React.FC<CreateHabitDialogProps> = ({ onCreateHa
 
     setLoading(true);
     try {
-      await onCreateHabit({
-        ...formData,
-        is_active: true,
-      });
+      await onCreateHabit(formData);
       setFormData({
         title: '',
         description: '',

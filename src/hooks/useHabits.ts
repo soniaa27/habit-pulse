@@ -12,6 +12,9 @@ export interface Habit {
   target_frequency: number;
   is_active: boolean;
   created_at: string;
+  updated_at: string;
+  user_id: string;
+  name: string;
 }
 
 export interface HabitLog {
@@ -20,6 +23,8 @@ export interface HabitLog {
   completed_at: string;
   duration_minutes: number;
   notes?: string;
+  user_id: string;
+  created_at: string;
 }
 
 export const useHabits = () => {
@@ -32,7 +37,7 @@ export const useHabits = () => {
     if (!user) return;
 
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('habits')
         .select('*')
         .eq('user_id', user.id)
@@ -40,7 +45,7 @@ export const useHabits = () => {
         .order('created_at', { ascending: true });
 
       if (error) throw error;
-      setHabits(data || []);
+      setHabits((data as any) || []);
     } catch (error: any) {
       toast({
         title: "Error",
@@ -61,7 +66,7 @@ export const useHabits = () => {
         .order('completed_at', { ascending: false });
 
       if (error) throw error;
-      setHabitLogs(data || []);
+      setHabitLogs((data as any) || []);
     } catch (error: any) {
       toast({
         title: "Error",
@@ -71,24 +76,38 @@ export const useHabits = () => {
     }
   };
 
-  const createHabit = async (habitData: Omit<Habit, 'id' | 'created_at'>) => {
+  const createHabit = async (habitData: {
+    title: string;
+    description?: string;
+    category?: string;
+    color: string;
+    target_frequency: number;
+  }): Promise<void> => {
     if (!user) return;
 
     try {
       const { data, error } = await supabase
         .from('habits')
-        .insert([{ ...habitData, user_id: user.id }])
+        .insert([{ 
+          title: habitData.title,
+          description: habitData.description,
+          category: habitData.category,
+          color: habitData.color,
+          target_frequency: habitData.target_frequency,
+          name: habitData.title,
+          user_id: user.id,
+          is_active: true
+        }])
         .select()
         .single();
 
       if (error) throw error;
 
-      setHabits(prev => [...prev, data]);
+      setHabits(prev => [...prev, data as any]);
       toast({
         title: "Success!",
         description: "Habit created successfully",
       });
-      return data;
     } catch (error: any) {
       toast({
         title: "Error",
@@ -115,7 +134,7 @@ export const useHabits = () => {
 
       if (error) throw error;
 
-      setHabitLogs(prev => [data, ...prev]);
+      setHabitLogs(prev => [data as any, ...prev]);
       toast({
         title: "Great job!",
         description: "Habit logged successfully",
@@ -136,7 +155,7 @@ export const useHabits = () => {
     try {
       const { error } = await supabase
         .from('habits')
-        .update({ is_active: false })
+        .update({ is_active: false } as any)
         .eq('id', habitId)
         .eq('user_id', user.id);
 
