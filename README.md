@@ -1,4 +1,4 @@
-#HABIT_pulse: Habit Tracker#
+# HABIT_pulse: Habit Tracker
 
 **URL**: https://lovable.dev/projects/00e2cd95-3c62-49a4-9cc9-45fe8b62ffe3
 
